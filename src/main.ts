@@ -1,5 +1,7 @@
 import { config } from 'dotenv'
-import * as cron from 'node-cron'
+import { of } from 'rxjs'
+import { tap, mergeMap } from 'rxjs/operators'
+import { cron } from 'rxjs-cron'
 import differenceBy = require('lodash.differenceby')
 import { sendMail } from './service/mail/sender'
 import { buildAvailableClassesMessage } from './service/mail/message'
@@ -32,11 +34,14 @@ export async function main() {
 }
 
 export function schedule() {
-  if (process.env.NODE_ENV === 'production') {
-    const task = cron.schedule(process.env.CRON_SCHEDULE, main)
+  const obs$ = process.env.NODE_ENV === 'production'
+    ? cron(process.env.CRON_SCHEDULE)
+    : of(1)
 
-    task.start()
-
-    console.log('task scheduled')
-  }
+  obs$
+    .pipe(
+      tap(() => console.log('task scheduled')),
+      mergeMap(() => main())
+    )
+    .subscribe()
 }

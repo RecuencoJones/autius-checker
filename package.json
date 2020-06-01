@@ -13,6 +13,8 @@
     "puppeteer": "3.1.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
+    "rxjs": "6.5.5",
+    "rxjs-cron": "gist:a9fbe582548a921ff3a253ad706aaa81",
     "sendmail": "1.6.1"
   },
   "devDependencies": {

@@ -3,6 +3,7 @@ apiVersion: apps/v1
 metadata:
   name: autius-checker
 spec:
+  revisionHistoryLimit: 1
   selector:
     matchLabels:
       app: autius-checker
@@ -23,10 +24,10 @@ spec:
           resources:
             requests:
               cpu: 10m
-              memory: 25Mi
+              memory: 64Mi
             limits:
               cpu: 100m
-              memory: 50Mi
+              memory: 128Mi
       volumes:
       - name: env
         secret:
