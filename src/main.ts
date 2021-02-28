@@ -18,13 +18,17 @@ export async function main() {
   const classes: Array<AutiusClass> = await getClasses()
   const cached: Array<Partial<AutiusClass>> = await getCachedClasses()
 
-  const result = differenceBy(classes, cached, 'id')
+  let result = differenceBy(classes, cached, 'id')
 
   console.log('actual', classes.length)
   console.log('cached', cached.length)
   console.log('result', result.length)
 
   if (process.env.NODE_ENV === 'production' && result.length > 0) {
+    if (process.env.PREFERRED_TEACHER) {
+      result = result.filter(({ teacherName }) => teacherName?.toLowerCase()?.trim() === process.env.PREFERRED_TEACHER)
+    }
+
     await sendMail(buildAvailableClassesMessage(result))
   }
 
@@ -34,7 +38,7 @@ export async function main() {
 }
 
 export function schedule() {
-  const obs$ = process.env.NODE_ENV === 'production'
+  const obs$ = process.env.NODE_ENV === 'production' || process.env.APP_MODE !== 'single'
     ? cron(process.env.CRON_SCHEDULE)
     : of(1)
 
