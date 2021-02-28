@@ -5,4 +5,5 @@ export type AutiusClass = {
   start: string
   end: string
   teacherName: string
+  teacherLastName: string
 }

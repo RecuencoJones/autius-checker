@@ -5,16 +5,18 @@
     "build": "tsc"
   },
   "dependencies": {
+    "@google-cloud/firestore": "4.9.4",
     "dotenv": "8.2.0",
     "firebase-admin": "8.12.1",
+    "jwa": "2.0.0",
     "lodash.differenceby": "4.8.0",
+    "moment": "2.29.1",
     "node-cron": "2.0.3",
     "nodemailer": "6.4.6",
     "puppeteer": "3.1.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "rxjs": "6.5.5",
-    "rxjs-cron": "gist:a9fbe582548a921ff3a253ad706aaa81",
     "sendmail": "1.6.1"
   },
   "devDependencies": {

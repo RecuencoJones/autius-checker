@@ -3,8 +3,9 @@
     "outDir": "dist",
     "module": "commonjs",
     "moduleResolution": "node",
-    "target": "esnext",
-    "jsx": "react"
+    "target": "es6",
+    "jsx": "react",
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*.ts",

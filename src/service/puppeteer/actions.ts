@@ -15,11 +15,13 @@ export async function getClasses() {
 
     await page.goto(AUTIUS_URL, { waitUntil: 'networkidle0' })
 
-    await page.type('#user', process.env.AUTIUS_USER)
-    await page.type('#password', process.env.AUTIUS_PASS)
+    await page.type('input[type="text"]', process.env.AUTIUS_USER)
+    await page.type('input[type="password"]', process.env.AUTIUS_PASS)
     await page.keyboard.press('Enter')
 
-    await page.waitForNavigation({ waitUntil: 'networkidle0' })
+    try {
+      await page.waitForNavigation({ waitUntil: 'networkidle2' })
+    } catch {}
 
     return await page.evaluate(getAvailableClasses)
   } finally {

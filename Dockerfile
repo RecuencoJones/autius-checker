@@ -7,14 +7,14 @@ COPY . .
 RUN npm ci \
  && npm run build
 
-FROM buildkite/puppeteer as install
+FROM buildkite/puppeteer:5.2.1 as install
 
 WORKDIR /app
 COPY --from=build /build/package.json .
 COPY --from=build /build/package-lock.json .
 
 RUN npm ci --production \
- && npm cache clear -f
+ && npm cache clear -fg
 
 FROM install
 

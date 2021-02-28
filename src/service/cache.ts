@@ -27,28 +27,28 @@ export function initCache() {
   cache = db.collection(CACHE_COLLECTION_ID)
 }
 
-export async function getCachedClasses() {
+export async function getCachedClasses(): Promise<Array<Partial<AutiusClass>>> {
   try {
     const doc = await cache.doc(CACHE_DOCUMENT_ID).get()
+    const items: Array<number> = JSON.parse(doc.data().items)
 
-    return JSON.parse(doc.data().items)
+    return items.map((id) => ({ id }))
   } catch {
     return []
   }
 }
 
-export async function setCachedClasses(value: Array<Partial<AutiusClass>>) {
-  let batch = db.batch()
+export async function setCachedClasses(classes: Array<AutiusClass>) {
+  const value = classes.map(({ id }) => id)
 
   const docs = await cache.listDocuments()
 
-  docs.forEach((doc) => batch.delete(doc))
+  await docs
+    .reduce(((batch, doc) => batch.delete(doc)), db.batch())
+    .commit()
 
-  await batch.commit()
-
-  batch = db.batch()
-
-  batch.set(cache.doc(CACHE_DOCUMENT_ID), { items: JSON.stringify(value) })
-
-  await batch.commit()
+  await db
+    .batch()
+    .set(cache.doc(CACHE_DOCUMENT_ID), { items: JSON.stringify(value) })
+    .commit()
 }

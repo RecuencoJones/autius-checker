@@ -1,7 +1,7 @@
 import { config } from 'dotenv'
 import { of } from 'rxjs'
 import { tap, mergeMap } from 'rxjs/operators'
-import { cron } from 'rxjs-cron'
+import { cron } from './rxjs-cron'
 import differenceBy = require('lodash.differenceby')
 import { sendMail } from './service/mail/sender'
 import { buildAvailableClassesMessage } from './service/mail/message'
@@ -15,26 +15,30 @@ initCache()
 export async function main() {
   console.log('running', new Date().toISOString())
 
-  const classes: Array<AutiusClass> = await getClasses()
+  const classes: Array<AutiusClass> = (await getClasses()).results
   const cached: Array<Partial<AutiusClass>> = await getCachedClasses()
 
-  const result = differenceBy(classes, cached, 'id')
+  let result = differenceBy(classes, cached, 'id')
 
   console.log('actual', classes.length)
   console.log('cached', cached.length)
   console.log('result', result.length)
 
   if (process.env.NODE_ENV === 'production' && result.length > 0) {
+    if (process.env.PREFERRED_TEACHER) {
+      result = result.filter(({ teacherName }) => teacherName?.toLowerCase()?.trim() === process.env.PREFERRED_TEACHER)
+    }
+
     await sendMail(buildAvailableClassesMessage(result))
   }
 
-  await setCachedClasses(classes.map(({ id }) => ({ id })))
+  await setCachedClasses(classes)
 
   console.log('done', new Date().toISOString())
 }
 
 export function schedule() {
-  const obs$ = process.env.NODE_ENV === 'production'
+  const obs$ = process.env.NODE_ENV === 'production' && process.env.APP_MODE !== 'single'
     ? cron(process.env.CRON_SCHEDULE)
     : of(1)
 

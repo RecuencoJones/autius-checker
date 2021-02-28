@@ -1,23 +1,22 @@
 import * as React from 'react'
 import * as ReactDOMServer from 'react-dom/server'
+import * as moment from 'moment'
 import { AutiusClass } from '../../types'
 
-function ClassCard({ title, price, start, end, teacherName }: AutiusClass) {
-  const [ dateStart, timeStart ] = start.split(' ')
-  const [ dateEnd, timeEnd ] = end.split(' ')
-  const _timeStart = timeStart.split(':').slice(0, 2).join(':')
-  const _timeEnd = timeEnd.split(':').slice(0, 2).join(':')
+function ClassCard({ title, price, start, end, teacherName, teacherLastName }: AutiusClass) {
+  const _start = moment(new Date(Date.parse(start)))
+  const _end = moment(new Date(Date.parse(end)))
 
   return (
     <article>
       <h4>
-        { teacherName }
+        { teacherName } { teacherLastName }
       </h4>
       <div>
-        { dateStart }{ ' ' }{ _timeStart }{ ' - ' }{ dateStart !== dateEnd && `${ dateEnd } ` }{ _timeEnd }
+        { _start.format('DD/MM/YYYY') } { _start.format('hh:mm') } - { _end.format('hh:mm') }
       </div>
       <div>
-        { title }  <b>{ price }</b>
+        { title }  <b>{ price }€</b>
       </div>
     </article>
   )
