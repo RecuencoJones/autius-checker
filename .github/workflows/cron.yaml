@@ -1,9 +1,6 @@
 name: Find classes
 
 on:
-  push:
-    branches:
-      - "master"
   schedule:
   - cron: '*/15 * * * *'
 
@@ -12,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
       - run: 'echo "$ENV_FILE" > .env'
         env:
           ENV_FILE: ${{ secrets.ENV_FILE }}

@@ -24,11 +24,11 @@ export async function main() {
   console.log('cached', cached.length)
   console.log('result', result.length)
 
-  if (process.env.NODE_ENV === 'production' && result.length > 0) {
-    if (process.env.PREFERRED_TEACHER) {
-      result = result.filter(({ teacherName }) => teacherName?.toLowerCase()?.trim() === process.env.PREFERRED_TEACHER)
-    }
+  if (process.env.PREFERRED_TEACHER) {
+    result = result.filter(({ teacherName }) => teacherName?.toLowerCase()?.trim() === process.env.PREFERRED_TEACHER)
+  }
 
+  if (process.env.NODE_ENV === 'production' && result.length > 0) {
     await sendMail(buildAvailableClassesMessage(result))
   }
 
