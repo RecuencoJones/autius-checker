@@ -25,7 +25,8 @@ export async function main() {
   console.log('result', result.length)
 
   if (process.env.PREFERRED_TEACHER) {
-    result = result.filter(({ teacherName }) => teacherName?.toLowerCase()?.trim() === process.env.PREFERRED_TEACHER)
+    result = result.filter(({ teacherName }) => teacherName.toLowerCase().trim() === process.env.PREFERRED_TEACHER)
+    console.log('preferred', result.length)
   }
 
   if (process.env.NODE_ENV === 'production' && result.length > 0) {
