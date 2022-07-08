@@ -10,7 +10,7 @@
     "firebase-admin": "8.12.1",
     "jwa": "2.0.0",
     "lodash.differenceby": "4.8.0",
-    "moment": "2.29.1",
+    "moment": "2.29.4",
     "node-cron": "2.0.3",
     "nodemailer": "6.4.6",
     "nodemailer-sparkpost-transport": "2.2.0",
